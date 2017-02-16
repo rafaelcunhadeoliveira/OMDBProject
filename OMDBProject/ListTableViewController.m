@@ -12,6 +12,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import <AFNetworking/AFURLResponseSerialization.h>
 #import "UIImageView+AFNetworking.h"
+#import "IndividualMovieViewController.h"
 
 
 
@@ -24,8 +25,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSLog(@"movies: %@" , _movies);
-    //    _movies = [[NSUserDefaults standardUserDefaults] objectForKey:@"k"];
-    //    NSString *x = [[NSUserDefaults standardUserDefaults] objectForKey:@"k"];
     
     
     // Uncomment the following line to preserve selection between presentations.
@@ -57,10 +56,26 @@
     MovieObject *movieCollection = self.movies [indexPath.row];
     [cell.posterView setImageWithURL:movieCollection.posterURL];
     cell.nameLabel.text = [NSString stringWithFormat:@"%@", movieCollection.title];
+    cell.DetailsButton.tag = indexPath.row;
+    [cell.DetailsButton addTarget:self action:@selector(goToIndMovie:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
 }
 
+- (void) goToIndMovie:(UIButton *) sender {
+    
+    [self performSegueWithIdentifier: @"toIndMovie" sender: sender];
+    
+//    NSLog(@"Tag : %@", sender.tag);
+}
+
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"toIndMovie"]) {
+        IndividualMovieViewController *iv;
+        iv = [segue destinationViewController];
+        iv.movie = self.movies[[sender tag]];
+    }
+}
 
 //- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 //    return [tableView dequeueReusableCellWithIdentifier:@"movieCell"];;

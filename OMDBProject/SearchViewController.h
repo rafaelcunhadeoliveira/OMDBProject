@@ -13,6 +13,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *movieNameField;
 @property (weak, nonatomic) IBOutlet UIButton *SearchButton;
 @property NSArray<MovieObject*> *movies;
+@property NSArray<NSString*> *omdbId;
+
 -(void) Connect;
 
 - (IBAction)SearchButton:(id)sender;

@@ -23,6 +23,7 @@ NSString *movieName = @"";
 
 
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -79,9 +80,9 @@ NSString *movieName = @"";
     } failure:^(NSURLSessionTask* operation, NSError* error) {
         NSLog(@"Error: %@", error);
     }];
-    NSLog(@"%@", movieName);
+    NSLog(@"quantidade de filmes: %d", self.movies.count);
 
-    
+
 
 }
 

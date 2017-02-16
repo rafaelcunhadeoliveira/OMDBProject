@@ -19,6 +19,7 @@
 		532361691E535179000E33E3 /* MovieObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 532361681E535179000E33E3 /* MovieObject.m */; };
 		5323616E1E535B5E000E33E3 /* ListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5323616D1E535B5E000E33E3 /* ListTableViewController.m */; };
 		533EF62B1E54A0CE0064C453 /* ListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 533EF6291E54A0CE0064C453 /* ListTableViewCell.m */; };
+		533EF6331E54B40E0064C453 /* IndividualMovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 533EF6321E54B40E0064C453 /* IndividualMovieViewController.m */; };
 		7A3DD9AA287036E89C569CFA /* libPods-OMDBProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18204821C76619601BC3F507 /* libPods-OMDBProjectTests.a */; };
 		87187E44DC05D3BAF36459F9 /* libPods-OMDBProjectUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76436B06884D86E2C127A609 /* libPods-OMDBProjectUITests.a */; };
 		C91C0A17F344FE11F06BFC49 /* libPods-OMDBProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 760B50D86909824098C56653 /* libPods-OMDBProject.a */; };
@@ -68,6 +69,8 @@
 		5323616D1E535B5E000E33E3 /* ListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListTableViewController.m; sourceTree = "<group>"; };
 		533EF6281E54A0CE0064C453 /* ListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListTableViewCell.h; sourceTree = "<group>"; };
 		533EF6291E54A0CE0064C453 /* ListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListTableViewCell.m; sourceTree = "<group>"; };
+		533EF6311E54B40E0064C453 /* IndividualMovieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndividualMovieViewController.h; sourceTree = "<group>"; };
+		533EF6321E54B40E0064C453 /* IndividualMovieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndividualMovieViewController.m; sourceTree = "<group>"; };
 		687067B36B2EF4AAF47AF289 /* Pods-OMDBProjectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OMDBProjectTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OMDBProjectTests/Pods-OMDBProjectTests.debug.xcconfig"; sourceTree = "<group>"; };
 		760B50D86909824098C56653 /* libPods-OMDBProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OMDBProject.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		76436B06884D86E2C127A609 /* libPods-OMDBProjectUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OMDBProjectUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -187,6 +190,8 @@
 				5323616D1E535B5E000E33E3 /* ListTableViewController.m */,
 				533EF6281E54A0CE0064C453 /* ListTableViewCell.h */,
 				533EF6291E54A0CE0064C453 /* ListTableViewCell.m */,
+				533EF6311E54B40E0064C453 /* IndividualMovieViewController.h */,
+				533EF6321E54B40E0064C453 /* IndividualMovieViewController.m */,
 			);
 			name = List;
 			sourceTree = "<group>";
@@ -496,6 +501,7 @@
 			files = (
 				532361691E535179000E33E3 /* MovieObject.m in Sources */,
 				532361381E5333BB000E33E3 /* OMDBProject.xcdatamodeld in Sources */,
+				533EF6331E54B40E0064C453 /* IndividualMovieViewController.m in Sources */,
 				532361621E533455000E33E3 /* SearchViewController.m in Sources */,
 				5323612F1E5333BB000E33E3 /* AppDelegate.m in Sources */,
 				533EF62B1E54A0CE0064C453 /* ListTableViewCell.m in Sources */,
