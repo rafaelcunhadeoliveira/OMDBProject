@@ -185,10 +185,10 @@
             </objects>
             <point key="canvasLocation" x="4485.6000000000004" y="-581.55922038980509"/>
         </scene>
-        <!--Carousel View Controller-->
+        <!--Icarousel View Controller-->
         <scene sceneID="NeL-zO-GfH">
             <objects>
-                <viewController id="MW7-9e-2dG" customClass="iCarouselViewController" sceneMemberID="viewController">
+                <viewController id="MW7-9e-2dG" customClass="icarouselViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="DbZ-xj-Bu7"/>
                         <viewControllerLayoutGuide type="bottom" id="RLq-0u-bIb"/>
@@ -206,6 +206,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="carousel" destination="lS9-5S-nl1" id="qQK-W2-PHA"/>
                         <outlet property="carouselView" destination="lS9-5S-nl1" id="wPg-LK-7MV"/>
                     </connections>
                 </viewController>

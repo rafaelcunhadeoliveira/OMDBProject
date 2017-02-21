@@ -31,7 +31,7 @@
 - (IBAction)SearchButton:(id)sender {
     _movieName = movieNameField.text;
     if(_movieName.length > 2){
-        [self Connect];
+        [self performSegueWithIdentifier: @"ListSearch" sender: nil];
     }
     else{
         UIAlertController * view=   [UIAlertController

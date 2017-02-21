@@ -18,6 +18,7 @@
 @implementation ListTableViewController
 
 - (void)viewDidLoad {
+    [self Connect];
     [super viewDidLoad];
     
     
@@ -30,6 +31,7 @@
 }
 
 - (void)didReceiveMemoryWarning {
+    
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -43,7 +45,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     //#warning Incomplete implementation, return the number of rows
-    return _movies.count;
+    return 10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -71,27 +73,26 @@
     }
 }
 
--(void) Connect {
+-(void) Connect {    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    
     NSString *stringDaBusca = [_movieName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
     NSString *link = [NSString stringWithFormat:@"https://www.omdbapi.com/?s=%@&y=&plot=short&r=json",stringDaBusca];
     NSURL *URL = [NSURL URLWithString:link];
-    
-    
-    
-    AFHTTPSessionManager *managerHTTP = [AFHTTPSessionManager manager];
+    AFHTTPSessionManager *managerHTTP = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
     [managerHTTP.requestSerializer setTimeoutInterval:15];
     [managerHTTP GET:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         NSArray *jsons = [responseObject objectForKey:@"Search"];
         if(jsons.count != 0){
-            NSLog(@"%@", jsons);
+        NSLog(@"JSON: %@", responseObject);
+
             NSMutableArray *names = [NSMutableArray arrayWithCapacity:jsons.count];
             for (NSDictionary *json in jsons) {
                 MovieObject *movie = [[MovieObject alloc] initWithData:json];
                 [names addObject:movie];
             }
-            self.movies = names;
+            _movies = names;
             
-            [self performSegueWithIdentifier: @"ListSearch" sender: nil];
+            
         }
         else{
             UIAlertController * view=   [UIAlertController
