@@ -17,10 +17,16 @@
     if (self) {
         _title = jsonDataObject[@"Title"];
         _year = jsonDataObject[@"Year"];
+        _runtime = jsonDataObject [@"Runtime"];
+        _genre = jsonDataObject [@"Genre"];
+        _director = jsonDataObject[@"Director"];
+        _actors = jsonDataObject [@"Actors"];
+        _plot = jsonDataObject [@"Plot"];
         _type = jsonDataObject [@"Type"];
         _imdbID = jsonDataObject [@"imdbID"];
         _poster = jsonDataObject [@"Poster"];
-        _posterURL = [NSURL URLWithString:_poster];
+        _posterurl = [NSURL URLWithString:_poster];
+
         
     }
     
