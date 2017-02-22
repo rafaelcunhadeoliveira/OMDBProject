@@ -18,23 +18,16 @@
 @implementation ListTableViewController
 
 - (void)viewDidLoad {
+    _actualPage = 1;
+    [self Connect];
     [super viewDidLoad];
-    
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
 }
 
 - (void)didReceiveMemoryWarning {
+    
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
-
-#pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     //#warning Incomplete implementation, return the number of sections
@@ -43,8 +36,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     //#warning Incomplete implementation, return the number of rows
-    return _movies.count;
+    return 10;
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"movieCell" forIndexPath:indexPath];
@@ -71,28 +65,49 @@
     }
 }
 
--(void) Connect {
+-(void) Connect {    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    
+
+    
     NSString *stringDaBusca = [_movieName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
     NSString *link = [NSString stringWithFormat:@"https://www.omdbapi.com/?s=%@&y=&plot=short&r=json",stringDaBusca];
     NSURL *URL = [NSURL URLWithString:link];
-    
-    
-    
-    AFHTTPSessionManager *managerHTTP = [AFHTTPSessionManager manager];
+    AFHTTPSessionManager *managerHTTP = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
     [managerHTTP.requestSerializer setTimeoutInterval:15];
     [managerHTTP GET:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         NSArray *jsons = [responseObject objectForKey:@"Search"];
         if(jsons.count != 0){
-            NSLog(@"%@", jsons);
+        NSLog(@"JSON: %@", responseObject);
+
             NSMutableArray *names = [NSMutableArray arrayWithCapacity:jsons.count];
             for (NSDictionary *json in jsons) {
                 MovieObject *movie = [[MovieObject alloc] initWithData:json];
                 [names addObject:movie];
             }
-            self.movies = names;
+            _movies = names;
             
-            [self performSegueWithIdentifier: @"ListSearch" sender: nil];
+            
         }
+    
+//    NSString *stringDaBusca = [_movieName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+//    NSString *link = [NSString stringWithFormat:@"https://www.omdbapi.com/?s=%@&y=&plot=short&r=json",stringDaBusca];
+//    NSURL *URL = [NSURL URLWithString:link];
+//    
+//    AFHTTPSessionManager *managerHTTP = [AFHTTPSessionManager manager];
+//    [managerHTTP.requestSerializer setTimeoutInterval:15];
+//    [managerHTTP GET:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+//        NSArray *jsons = [responseObject objectForKey:@"Search"];
+//        if(jsons.count != 0){
+//            NSLog(@"%@", jsons);
+//            NSMutableArray *names = [NSMutableArray arrayWithCapacity:jsons.count];
+//            for (NSDictionary *json in jsons) {
+//                MovieObject *movie = [[MovieObject alloc] initWithData:json];
+//                [names addObject:movie];
+//            }
+//            self.movies = names;
+//            
+//            
+//        }
         else{
             UIAlertController * view=   [UIAlertController
                                          alertControllerWithTitle:@""
