@@ -1,23 +1,18 @@
 //
-//  ListTableViewCell.m
+//  LoadTableViewCell.m
 //  OMDBProject
 //
-//  Created by Rafael Cunha de Oliveira on 15/02/17.
+//  Created by Rafael Cunha de Oliveira on 16/02/17.
 //  Copyright © 2017 Rafael Cunha de Oliveira. All rights reserved.
 //
 
-#import "ListTableViewCell.h"
+#import "LoadTableViewCell.h"
 
-@implementation ListTableViewCell
+@implementation LoadTableViewCell
 
 - (void)awakeFromNib {
-    _loading.hidden = NO;
-    [_loading startAnimating];
     [super awakeFromNib];
-    [_loading stopAnimating];
-    _loading.hidesWhenStopped = true;
     // Initialization code
-    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -26,8 +21,6 @@
     // Configure the view for the selected state
 }
 
-
-
-- (IBAction)SaveButton:(id)sender {
+- (IBAction)loadDetailButton:(id)sender {
 }
 @end

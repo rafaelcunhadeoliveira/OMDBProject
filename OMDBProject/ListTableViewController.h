@@ -8,10 +8,22 @@
 
 #import <UIKit/UIKit.h>
 #import "MovieObject.h"
+#import "ListTableViewCell.h"
+#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFURLResponseSerialization.h>
+#import "UIImageView+AFNetworking.h"
+#import "IndividualMovieViewController.h"
 
 @interface ListTableViewController : UITableViewController
 @property(nonatomic) BOOL *isSomethingEnabled;
-@property(strong, nonatomic) NSArray<MovieObject*> *movies;
+@property(strong, nonatomic) NSMutableArray *movies;
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
+@property (strong, nonatomic) NSString *movieName;
+@property int actualPage;
+@property int totalItens;
+@property int totalPages;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *load;
+
+-(void) Connect;
 
 @end
