@@ -7,11 +7,7 @@
 //
 
 #import "ListTableViewController.h"
-#import "MovieObject.h"
-#import "ListTableViewCell.h"
-#import <AFNetworking/AFNetworking.h>
-#import <AFNetworking/AFURLResponseSerialization.h>
-#import "UIImageView+AFNetworking.h"
+
 
 
 
@@ -21,26 +17,110 @@
 
 @implementation ListTableViewController
 
+
+
 - (void)viewDidLoad {
+    _load.hidden = NO;
+    [_load startAnimating];
+    _actualPage = 1;
+    _movies = [[NSMutableArray alloc] init];
+    [self Connect];
+    self.navigationController.navigationBar.hidden=NO;
     [super viewDidLoad];
-    NSLog(@"movies: %@" , _movies);
-    //    _movies = [[NSUserDefaults standardUserDefaults] objectForKey:@"k"];
-    //    NSString *x = [[NSUserDefaults standardUserDefaults] objectForKey:@"k"];
-    
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+//    [_load stopAnimating];
+//    _load.hidesWhenStopped = true;
 }
 
 - (void)didReceiveMemoryWarning {
+    
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
+
+-(void) Connect {    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    
+    NSString *stringDaBusca = [_movieName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+    NSString *link = [NSString stringWithFormat:@"https://www.omdbapi.com/?s=%@&y=&plot=short&r=json",stringDaBusca];
+    NSURL *URL = [NSURL URLWithString:link];
+    AFHTTPSessionManager *managerHTTP = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
+    [managerHTTP.requestSerializer setTimeoutInterval:15];
+    [managerHTTP GET:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+        NSArray *jsons = [responseObject objectForKey:@"Search"];
+        NSString * here = [responseObject objectForKey:@"totalResults"];
+        _totalItens = here.intValue;
+        _totalPages = (_totalItens/10) + 1;
+        if(jsons.count != 0){
+            NSLog(@"JSON: %@", responseObject);
+            for (NSDictionary *json in jsons) {
+                MovieObject *movie = [[MovieObject alloc] initWithData:json];
+                [_movies addObject:movie];
+            }
+            [self.tableView reloadData];
+        }
+        
+        else{
+            UIAlertController * view=   [UIAlertController
+                                         alertControllerWithTitle:@""
+                                         message:@"No movies found"
+                                         preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertAction* ok = [UIAlertAction
+                                 actionWithTitle:@"OK"
+                                 style:UIAlertActionStyleDefault
+                                 handler:^(UIAlertAction * action) {
+                                     [view dismissViewControllerAnimated:YES completion:^{
+                                     }];
+                                 }];
+            [view addAction:ok];
+            [self presentViewController:view animated:YES completion:nil];
+        }
+    } failure:^(NSURLSessionTask* operation, NSError* error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
+-(void) Pagination {    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    
+    _actualPage += 1;
+    NSString *stringDaBusca = [_movieName stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+    NSString *link = [NSString stringWithFormat:@"https://www.omdbapi.com/?s=%@&page=%d",stringDaBusca,_actualPage];
+    NSURL *URL = [NSURL URLWithString:link];
+    AFHTTPSessionManager *managerHTTP = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
+    [managerHTTP.requestSerializer setTimeoutInterval:15];
+    [managerHTTP GET:URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+        NSArray *jsons = [responseObject objectForKey:@"Search"];
+        
+        if(jsons.count != 0){
+            NSLog(@"JSON: %@", responseObject);
+            
+            for (NSDictionary *json in jsons) {
+                MovieObject *movie = [[MovieObject alloc] initWithData:json];
+                [_movies addObject:movie];
+            }
+            [self.tableView reloadData];
+        }
+        
+        else{
+            UIAlertController * view=   [UIAlertController
+                                         alertControllerWithTitle:@""
+                                         message:@"No movies found"
+                                         preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertAction* ok = [UIAlertAction
+                                 actionWithTitle:@"OK"
+                                 style:UIAlertActionStyleDefault
+                                 handler:^(UIAlertAction * action) {
+                                     //                               [self performSegueWithIdentifier: @"goToHome" sender: self];
+                                     [view dismissViewControllerAnimated:YES completion:^{
+                                     }];
+                                 }];
+            [view addAction:ok];
+            [self presentViewController:view animated:YES completion:nil];
+        }
+    } failure:^(NSURLSessionTask* operation, NSError* error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     //#warning Incomplete implementation, return the number of sections
@@ -52,57 +132,55 @@
     return _movies.count;
 }
 
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"movieCell" forIndexPath:indexPath];
-    MovieObject *movieCollection = self.movies [indexPath.row];
-    [cell.posterView setImageWithURL:movieCollection.posterURL];
-    cell.nameLabel.text = [NSString stringWithFormat:@"%@", movieCollection.title];
-    
-    return cell;
+    //    ListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"movieCell" forIndexPath:indexPath];
+    return [tableView dequeueReusableCellWithIdentifier:@"movieCell"];
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(ListTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    MovieObject *movieCollection = self.movies [indexPath.row];
+    [cell.posterView setImageWithURL:movieCollection.posterurl];
+    cell.nameLabel.text = [NSString stringWithFormat:@"%@", movieCollection.title];
+    cell.DetailsButton.tag = indexPath.row;
+    [cell.DetailsButton addTarget:self action:@selector(goToIndMovie:) forControlEvents:UIControlEventTouchUpInside];
+//    [cell.loading stopAnimating];
+//    cell.loading.hidesWhenStopped = true;
+}
 
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    return [tableView dequeueReusableCellWithIdentifier:@"movieCell"];;
-//}
-//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-//    if ([_movies count]) {
-//        MovieObject *movieCollection = self.movies [indexPath.row];
-////        [cell addGestureRecognizer:_longPress];
-//        cell.textLabel.textColor = [UIColor whiteColor];
-//        cell.backgroundColor = [UIColor blackColor];
-//        cell.textLabel.text = [NSString stringWithFormat:@"%@", movieCollection.title];
-//
-////        [cell.imageView cancelImageDownloadTask];
-////        cell.imageView.image = [UIImage imageNamed:@"defaultImage"];
-////        if (movieCollection.posterMovieURL) {
-////            NSLog(@"%@", cell.imageView);
-////            [cell.imageView setImageWithURL:movieCollection.posterMovieURL];
-////
-////        }
-//
-//    }
-//    else {
-//        UIAlertController *view = [UIAlertController
-//                                   alertControllerWithTitle:@"Erro"
-//                                   message:@"Filme não encontrado, voltar para a tela inicial."
-//                                   preferredStyle:UIAlertControllerStyleActionSheet];
-//        UIAlertAction* ok = [UIAlertAction
-//                             actionWithTitle:@"Ok"
-//                             style:UIAlertActionStyleDefault
-//                             handler:^(UIAlertAction *action) {
-//                                 NSArray *viewControllersFromStack = [self.navigationController viewControllers];
-//                                 for(UIViewController *currentVC in [viewControllersFromStack reverseObjectEnumerator]) {
-//                                     [currentVC.navigationController popViewControllerAnimated:NO];
-//                                 }
-//                                 [view dismissViewControllerAnimated:YES completion:^{
-//                                 }];
-//                             }];
-//        [view addAction:ok];
-//        [self presentViewController:view animated:YES completion:nil];
-//    }
-//
-//}
+- (void) goToIndMovie:(UIButton *) sender {
+    
+    [self performSegueWithIdentifier: @"toIndMovie" sender: sender];
+    
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    NSLog(@"Will begin dragging");
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)aScrollView
+{
+    CGFloat height = aScrollView.frame.size.height;
+    
+    CGFloat contentYoffset = aScrollView.contentOffset.y;
+    
+    CGFloat distanceFromBottom = aScrollView.contentSize.height - contentYoffset;
+    
+    if(distanceFromBottom < height)
+    {   if(_actualPage < _totalPages){
+        [self Pagination];
+    }
+    }
+}
+
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"toIndMovie"]) {
+        IndividualMovieViewController *iv;
+        iv = [segue destinationViewController];
+        iv.movie = self.movies[[sender tag]];
+    }
+}
 
 
 /*
@@ -119,8 +197,10 @@
  if (editingStyle == UITableViewCellEditingStyleDelete) {
  // Delete the row from the data source
  [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ 
  } else if (editingStyle == UITableViewCellEditingStyleInsert) {
  // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ 
  }
  }
  */
